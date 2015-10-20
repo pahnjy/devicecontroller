@@ -3,19 +3,41 @@ package com.pineone.icbms.so.service;
 import com.pineone.icbms.so.model.ResponseMessage;
 import com.pineone.icbms.so.model.ResultMessage;
 import org.apache.http.HttpResponse;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by use on 2015-10-14.
  */
 
-public interface ResponseDataService {
-    /**
-     * SI·Î ºÎÅÍ µ¥ÀÌÅÍ Ã³¸®ÈÄ ÀÀ´ä °á°ú¸¦ È®ÀÎ ÈÄ Àü´ŞÇÏ´Â service
-     * @param message SI·Î ºÎÅÍ ¿Â °á°ú ¸Ş½ÃÁö
-     * @return
-     */
-    ResponseMessage ResponseMessageByResultMessage(ResultMessage message);
+@Service
+public class ResponseDataService implements IResponseDataService {
 
-    ResponseMessage ResponseMessageByHttpResponse(HttpResponse response);
+    public final String RESPONSE_SUCCESS = "success";
+    public final String RESPONSE_FAILURE = "failure";
+    public final String RESPONSE_SUCCESS_CODE = "200";
+    public final String RESPONSE_FIALURE_CODE = "400";
+    public final String RESPONSE_SUCCESS_ONEM2MCODE = "2000";
 
+    @Override
+    public ResponseMessage responseMessageByResultMessage(ResultMessage message) {
+        // ResultMessageë¥¼ ë¶„ì„í›„ ê²°ê³¼ ë°ì´í„°ë¥¼ ì „ë‹¬.
+
+        ResponseMessage responseMessage = new ResponseMessage();
+
+        if(RESPONSE_SUCCESS_ONEM2MCODE.equals(message.get_resultCode()) || RESPONSE_SUCCESS.equals(message.get_result())){
+            responseMessage.setCode(RESPONSE_SUCCESS_CODE);
+            responseMessage.setMessage(RESPONSE_SUCCESS);
+        } else {
+            responseMessage.setCode(RESPONSE_FIALURE_CODE);
+            responseMessage.setMessage(RESPONSE_FAILURE);
+            responseMessage.setContent("error ê²½ìœ„ ì‘ì„±.");
+        }
+
+        return responseMessage;
+    }
+
+    @Override
+    public ResponseMessage responseMessageByHttpResponse(HttpResponse response) {
+        return null;
+    }
 }
