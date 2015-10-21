@@ -2,9 +2,11 @@ package com.pineone.icbms.so.controller;
 
 import com.pineone.icbms.so.driver.IDeviceDriver;
 import com.pineone.icbms.so.driver.LGHD3xxLightDeviceDriver;
+import com.pineone.icbms.so.driver.NyriusSSxxSmartSwitchDeviceDriver;
 import com.pineone.icbms.so.model.VirtualDeviceControlMessage;
 import com.pineone.icbms.so.service.IResponseDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,11 @@ public class DeviceController {
 
 
     List<IDeviceDriver> deviceDrivers;
+
+    @Autowired
+    LGHD3xxLightDeviceDriver lgDevice;
+    @Autowired
+    NyriusSSxxSmartSwitchDeviceDriver nyriusDevice;
 
     /**
      * 디바이스 제어요청 메시지 전달. <BR/>
@@ -41,11 +48,11 @@ public class DeviceController {
      */
     public void initDeviceDriver(){
 
-        LGHD3xxLightDeviceDriver lgDevice = new LGHD3xxLightDeviceDriver();
         if(deviceDrivers == null){
             deviceDrivers = new ArrayList<>();
         }
         deviceDrivers.add(lgDevice);
+        deviceDrivers.add(nyriusDevice);
     }
 
 
